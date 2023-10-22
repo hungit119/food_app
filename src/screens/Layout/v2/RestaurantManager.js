@@ -16,6 +16,7 @@ import {
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import Divide from "../../../components/Divide";
 import { useNavigation } from "@react-navigation/native";
+import ButtonAction from "../../../components/ButtonAction";
 
 const RestaurantManager = () => {
   const navigation = useNavigation();
@@ -117,9 +118,10 @@ const RestaurantManager = () => {
           <TouchableOpacity
             onPress={() => navigation.navigate("FormRestaurant")}
           >
-            <View className="bg-[#3BC5C9] w-[70px] h-[70px] shadow-md rounded-full flex items-center justify-center">
+            {/* <View className="bg-[#3BC5C9] w-[70px] h-[70px] shadow-md rounded-full flex items-center justify-center">
               <PlusIcon size={hp(3)} color="white" />
-            </View>
+            </View> */}
+            <ButtonAction />
           </TouchableOpacity>
         </View>
       </View>

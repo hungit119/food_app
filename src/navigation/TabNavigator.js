@@ -11,22 +11,21 @@ import { StyleSheet, Animated } from "react-native";
 
 const tabs = [
   {
-    name: "Home",
-    screen: HomeScreen,
-  },
-
-  {
     name: "Favorite",
     screen: FavoriteScreen,
+  },
+  {
+    name: "Home",
+    screen: HomeScreen,
   },
   {
     name: "Cart",
     screen: CartScreen,
   },
-  {
-    name: "Profile",
-    screen: ProfileScreen,
-  },
+  // {
+  //   name: "Profile",
+  //   screen: ProfileScreen,
+  // },
 ];
 
 const Tab = createBottomTabNavigator();
