@@ -27,8 +27,9 @@ import ListRestaurant from "./components/Restaurant/ListRestaurant";
 import ProductScreen from "./Layout/ProductScreen";
 import { useSelector } from "react-redux";
 import { baseApiUrl } from "../constants";
+import TopRestaurant from "./components/TopRestaurant";
+import TopFood from "./components/TopFood";
 export default function HomeScreen() {
-
   const user = useSelector((state) => state.auth.user);
   const orderDetails = useSelector((state) => state.order.orderDetails);
   const order = useSelector((state) => state.order.order);
@@ -45,7 +46,7 @@ export default function HomeScreen() {
     // } catch (error) {
     //   throw error;
     // }
-  } 
+  };
   useEffect(() => {
     getCategories();
     getRecipes();
@@ -152,36 +153,51 @@ export default function HomeScreen() {
         {/* recipes */}
         <View>
           {/* <Recipes meals={meals} categories={categories} /> */}
-          <ProductScreen />
+          {/* <ProductScreen /> */}
+          <TopRestaurant />
+        </View>
+        <View>
+          {/* <Recipes meals={meals} categories={categories} /> */}
+          {/* <ProductScreen /> */}
+          <TopFood />
         </View>
         {/* oder*/}
       </ScrollView>
-      {
-        orderDetails.length !== 0 && <TouchableOpacity className="absolute bottom-7 right-6" onPress={() => navigation.navigate('ListCartFood',{
-          order_id:order.id
-        })}>
-        <View style={{
-          shadowColor:"#000",
-          shadowOffset: {
-            width: 0,
-            height: 2,
-          },
-          shadowOpacity: 0.23,
-          shadowRadius: 2.62,
-          
-          elevation: 4,
-        }}>
-          <View className=" bg-slate-100 rounded-full w-20 h-20">
-            <View className="items-center top-7 ">
-              <Icon name="shopping-basket" size={26} color="#3BC5C9" />
+      {orderDetails.length !== 0 && (
+        <TouchableOpacity
+          className="absolute bottom-7 right-6"
+          onPress={() =>
+            navigation.navigate("ListCartFood", {
+              order_id: order.id,
+            })
+          }
+        >
+          <View
+            style={{
+              shadowColor: "#000",
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.23,
+              shadowRadius: 2.62,
+
+              elevation: 4,
+            }}
+          >
+            <View className=" bg-slate-100 rounded-full w-20 h-20">
+              <View className="items-center top-7 ">
+                <Icon name="shopping-basket" size={26} color="#3BC5C9" />
+              </View>
+            </View>
+            <View className="bg-[#F0FFFF] rounded-full w-7 h-7 -top-[87px] left-12">
+              <Text className="text-center top-1 text-[#3BC5C9] ">
+                {orderDetails.length}
+              </Text>
             </View>
           </View>
-          <View className="bg-[#F0FFFF] rounded-full w-7 h-7 -top-[87px] left-12">
-            <Text className="text-center top-1 text-[#3BC5C9] ">{orderDetails.length}</Text>
-          </View>
-        </View>
-      </TouchableOpacity>
-      }
+        </TouchableOpacity>
+      )}
     </View>
   );
 }

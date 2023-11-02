@@ -21,31 +21,46 @@ import CheckoutCart from "./CheckoutCart";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { baseApiUrl } from "../constants";
-import { setAllOrderDetails, setToTalAmount } from "../features/order/orderSlice";
-export default function ListCartFood({route}) {
-  const {order_id} = route.params; 
+import {
+  setAllOrderDetails,
+  setToTalAmount,
+} from "../features/order/orderSlice";
+export default function ListCartFood({ route }) {
+  const { order_id } = route.params;
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const [orderDetail, setorderDetail] = useState([]);
   const orderDetails = useSelector((state) => state.order.orderDetails);
   const totalMount = useSelector((state) => state.order.totalMount);
+  console.log("====================================");
+  console.log(orderDetails);
+  console.log("====================================");
   const fetchOrderDetailByOrderId = async () => {
     try {
-      const response = await axios.post(baseApiUrl + '/api/order-detail/get-by-order-id-with-food',{
-        order_id
-      });
+      const response = await axios.post(
+        baseApiUrl + "/api/order-detail/get-by-order-id-with-food",
+        {
+          order_id,
+        }
+      );
       if (response.data.success) {
-        setAllOrderDetails(response.data.data);
-        setToTalAmount(response.data.data.reduce((total, obj) => {
-          return total + obj.food.prize * obj.quantity;
-        }, 0));
+        setorderDetail(response.data.data);
+        console.log("====================================");
+        console.log(orderDetail);
+        console.log("====================================");
+        setToTalAmount(
+          response.data.data.reduce((total, obj) => {
+            return total + obj.food.prize * obj.quantity;
+          }, 0)
+        );
       }
     } catch (error) {
       throw error;
     }
-  }
+  };
   useEffect(() => {
     fetchOrderDetailByOrderId();
-  },[])
+  }, []);
 
   return (
     <View className="flex-1">
@@ -72,8 +87,8 @@ export default function ListCartFood({route}) {
             <Text className="text-lg font-bold">Danh sách món ăn</Text>
           </View>
         </View>
-        {
-          orderDetails.map(orderDetail => <View>
+        {orderDetail.map((od) => (
+          <View>
             <View className="mx-4 mt-2 space-y-2 mb-2 shadow-sm bg-white py-4 rounded-md flex flex-row items-center px-2">
               <TouchableHighlight
                 underlayColor="white"
@@ -82,7 +97,7 @@ export default function ListCartFood({route}) {
                 <View className="w-24 mr-3 ">
                   <Image
                     className="w-full h-16 rounded-lg "
-                    source={require("../../assets/images/swiper2.jpg")}
+                    source={{ uri: od.food.thumbnail }}
                   />
                 </View>
               </TouchableHighlight>
@@ -91,28 +106,29 @@ export default function ListCartFood({route}) {
                 onPress={() => navigation.navigate("CheckoutCart")}
               >
                 <View className="flex-1 ">
-                  <Text className="text-base font-bold">
-                    Bánh mì muối ớt-Cương Thiều
-                  </Text>
-                  <Text className="pt-1  font-thin">
-                    đại học xây dựng,giải phóng,hà nội
+                  <Text className="text-base font-bold">{od.food.title}</Text>
+                  <Text numberOfLines={2} className="pt-1  font-thin w-[200]">
+                    {od.food.description}
                   </Text>
                   <View className="flex-row  mt-2 ">
-                    <Text className="pt-1 ">30.000đ</Text>
-                    <Text className="pt-1 ml-4  font-extralight"> 1 món</Text>
+                    <Text className="pt-1 ">{od.food.prize}</Text>
+                    <Text className="pt-1 ml-4  font-extralight">
+                      {" "}
+                      Số lượng:
+                      {od.quantity}
+                    </Text>
                   </View>
                 </View>
               </TouchableHighlight>
-  
+
               <View className="flex items-center justify-center ml-4">
                 <TouchableOpacity>
                   <Text className="text-red-400 font-bold underline">Xóa</Text>
                 </TouchableOpacity>
               </View>
             </View>
-          </View>)
-        }
-        
+          </View>
+        ))}
       </ScrollView>
       <View className="flex-row justify-between px-4 my-4">
         <TouchableHighlight
@@ -125,10 +141,19 @@ export default function ListCartFood({route}) {
         </TouchableHighlight>
         <TouchableHighlight
           underlayColor="none"
-          onPress={() => navigation.navigate("CheckoutCart")}
+          onPress={() =>
+            navigation.navigate("CheckoutCart", {
+              order_id,
+            })
+          }
         >
           <View className="bg-[#3BC5C9] h-12 px-4 py-2 rounded-lg items-center justify-center ">
-            <Text className="text-white text-base ">{totalMount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</Text>
+            <Text className="text-white text-base ">
+              {totalMount.toLocaleString("vi-VN", {
+                style: "currency",
+                currency: "VND",
+              })}
+            </Text>
           </View>
         </TouchableHighlight>
       </View>
