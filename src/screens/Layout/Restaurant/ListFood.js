@@ -18,7 +18,7 @@ import { baseApiUrl } from "../../../constants";
 import { useSelector } from "react-redux";
 
 const ListFood = ({ route }) => {
-  const { restaurent } = route.params;
+  const { item } = route.params;
   const [isLoading, setIsLoading] = useState(true);
   const [activeCategoryId, setActiveCategoryId] = useState(null);
   const [foods, setfoods] = useState([]);
@@ -36,7 +36,7 @@ const ListFood = ({ route }) => {
       const response = await axios.post(
         baseApiUrl + "/api/food/get-by-res-id",
         {
-          restaurent_id: restaurent.id,
+          restaurent_id: item.id,
         }
       );
       if (response.data.success) {
@@ -55,7 +55,7 @@ const ListFood = ({ route }) => {
     <>
       <ScrollView className="h-[280px]">
         <ImageBackground
-          src={restaurent.thumbnail}
+          src={item.thumbnail}
           style={{
             height: 500 / 2 + 10 * 2,
             justifyContent: "space-between",
@@ -77,6 +77,7 @@ const ListFood = ({ route }) => {
                 padding: 10,
                 borderRadius: 10 * 1.5,
               }}
+              onPress={() => navigation.goBack()}
             >
               <Ionicons name="arrow-back" color="#4D4F52" size={10 * 2} />
             </TouchableOpacity>
@@ -105,8 +106,9 @@ const ListFood = ({ route }) => {
                 justifyContent: "space-between",
               }}
             >
-              <View>
+              <View style={{overflow: "hidden",}}>
                 <Text
+                  numberOfLines={1}
                   style={{
                     fontSize: 10 * 2,
                     color: "#fff",
@@ -114,9 +116,10 @@ const ListFood = ({ route }) => {
                     marginBottom: 10,
                   }}
                 >
-                  {restaurent.name}
+                  {item?.name}
                 </Text>
                 <Text
+                  numberOfLines={1}
                   style={{
                     fontSize: 10 * 1.8,
                     color: "#b5b5b5",
@@ -124,7 +127,7 @@ const ListFood = ({ route }) => {
                     marginBottom: 10,
                   }}
                 >
-                  {restaurent.address}
+                  {item?.address}
                 </Text>
                 <View style={{ flexDirection: "row", marginTop: 10 }}>
                   <Ionicons name="star" size={10 * 1.5} color="yellow" />
@@ -134,7 +137,7 @@ const ListFood = ({ route }) => {
                       marginLeft: 10,
                     }}
                   >
-                    {restaurent?.rating}
+                    {item?.rating}
                   </Text>
                 </View>
               </View>

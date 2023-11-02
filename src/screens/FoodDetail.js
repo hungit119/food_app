@@ -1,40 +1,30 @@
+import axios from "axios";
+import { StatusBar } from "expo-status-bar";
+import React, { useState } from "react";
 import {
-  View,
-  Text,
   ScrollView,
-  TouchableOpacity,
+  Text,
   TextInput,
   TouchableHighlight,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import { Table, TableWrapper, Row, Col } from "react-native-table-component";
-import React, { useEffect, useState } from "react";
-import { StatusBar } from "expo-status-bar";
-import { CachedImage } from "../helpers/image";
-import Icon from "react-native-vector-icons/FontAwesome";
-import {v4} from "uuid";
+import { ArrowLeftIcon, HeartIcon } from "react-native-heroicons/solid";
+import Animated, { FadeIn } from "react-native-reanimated";
 import {
-  widthPercentageToDP as wp,
   heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
-import {
-  ChevronLeftIcon,
-  ClockIcon,
-  FireIcon,
-} from "react-native-heroicons/outline";
-import {
-  HeartIcon,
-  Square3Stack3DIcon,
-  UsersIcon,
-} from "react-native-heroicons/solid";
-import { useNavigation } from "@react-navigation/native";
-import axios from "axios";
-import Loading from "../components/loading";
-import YouTubeIframe from "react-native-youtube-iframe";
-import Animated, { FadeInDown, FadeIn } from "react-native-reanimated";
-import { ArrowLeftIcon } from "react-native-heroicons/solid";
+import Icon from "react-native-vector-icons/FontAwesome";
 import { useDispatch, useSelector } from "react-redux";
+import Comment from "../components/Comment/Comment";
 import { baseApiUrl } from "../constants";
-import { setAddToTalAmount, setOrder, setOrderDetails } from "../features/order/orderSlice";
+import {
+  setAddToTalAmount,
+  setOrder,
+  setOrderDetails,
+} from "../features/order/orderSlice";
+import { CachedImage } from "../helpers/image";
 
 export default function FoodDetail({ route, navigation }) {
   const { food } = route.params;
@@ -59,8 +49,7 @@ export default function FoodDetail({ route, navigation }) {
   const handlePressAddOrderDetail = () => {
     if (!order.id) {
       createNewOrderAndInitOrderDetail();
-    }
-    else{
+    } else {
       createOrderDetail(order.id);
     }
     return navigation.goBack();
@@ -71,13 +60,13 @@ export default function FoodDetail({ route, navigation }) {
         baseApiUrl + "/api/order/create-new-order",
         {
           restaurent_id: food.restaurent_id,
-          sid:'12345',
+          sid: "12345",
           customer_id: user.id,
         }
       );
       if (response.data.success) {
         console.log(response.data);
-        dispatch(setOrder(response.data.data))
+        dispatch(setOrder(response.data.data));
         createOrderDetail(response.data.data.id);
       }
     } catch (error) {
@@ -86,12 +75,15 @@ export default function FoodDetail({ route, navigation }) {
   };
   const createOrderDetail = async (order_id) => {
     try {
-      const response = await axios.post(baseApiUrl + '/api/order-detail/create-order-detail-by-order-id',{
-        order_id:order_id,
-        sid:'12345',
-        food_id:food.id,
-        quantity:count
-      })
+      const response = await axios.post(
+        baseApiUrl + "/api/order-detail/create-order-detail-by-order-id",
+        {
+          order_id: order_id,
+          sid: "12345",
+          food_id: food.id,
+          quantity: count,
+        }
+      );
       if (response.data.success) {
         dispatch(setOrderDetails(response.data.data));
         dispatch(setAddToTalAmount(totalPrice));
@@ -99,7 +91,7 @@ export default function FoodDetail({ route, navigation }) {
     } catch (error) {
       throw error;
     }
-  }
+  };
   return (
     <View
       className="bg-white flex-1 relative "
@@ -140,7 +132,7 @@ export default function FoodDetail({ route, navigation }) {
       </Animated.View>
 
       <ScrollView className=" absolute top-72 ">
-        <View className="  bg-white px-2">
+        <View className="  bg-white px-2 h-[50r0px]">
           <View className="flex-row justify-between ">
             <Text className="ml-2 text-3xl ">{food?.title}</Text>
             <View className=" mr-3">
@@ -148,13 +140,18 @@ export default function FoodDetail({ route, navigation }) {
             </View>
           </View>
           <Text className="mx-2 mt-4 font-light">{food.description}</Text>
-          <View className="mx-2 mt-8 flex-row mb-2">
+          <View className="flex-1 h-[300px] flex-row items-center bottom-0">
+            <Comment />
+          </View>
+
+          {/* <View className="mx-2 mt-8 flex-row mb-2">
             <Icon name="file-text-o" size={21} />
             <TextInput
+              
               className="ml-2"
-              placeholder="Bạn có gì muốn nhắn với nhà hàng không ?"
+              placeholder="Bình luận..."
             />
-          </View>
+          </View> */}
         </View>
 
         {/* <View className="pb-52  ">
@@ -196,6 +193,7 @@ export default function FoodDetail({ route, navigation }) {
           </View>
         </View> */}
       </ScrollView>
+
       {/* cartIcon */}
       <View className="flex-row justify-around bg-slate-50 absolute bottom-2 h-24  w-full  p-4">
         <View className="flex-row items-center">

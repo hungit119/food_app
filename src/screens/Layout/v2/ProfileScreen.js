@@ -20,6 +20,7 @@ import {
   PhoneArrowDownLeftIcon,
   InformationCircleIcon,
   HomeModernIcon,
+  MapIcon
 } from "react-native-heroicons/outline";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import Divide from "../../../components/Divide";
@@ -35,7 +36,7 @@ const ProfileScreen = () => {
       <View className="space-y-6 pt-14 bg-white">
         <View className="mx-4 space-y-2 mb-2">
           <View className="flex flex-row items-center">
-            <TouchableOpacity className="text-base font-semibold">
+            <TouchableOpacity onPress={() => navigation.goBack()} className="text-base font-semibold">
               <ArrowSmallLeftIcon size={hp(3)} color="black" />
             </TouchableOpacity>
             <Text className="text-base font-semibold text-center flex-1">
@@ -151,6 +152,18 @@ const ProfileScreen = () => {
               </View>
             </TouchableOpacity>
           </View>
+
+          <View className="mx-4 space-y-2 py-3 ">
+            <TouchableOpacity onPress={() => navigation.navigate("Map")}>
+              <View className="flex flex-row items-center gap-5">
+                <MapIcon size={hp(3)} color="black" />
+                <Text className="text-base font-medium">
+                  Bản đồ
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+          
         </View>
 
         <View className="mt-5 bg-white">

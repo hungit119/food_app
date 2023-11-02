@@ -19,6 +19,7 @@ import CreateFoodRestaurant from "../screens/Layout/v2/CreateFoodRestaurant";
 import FoodDetailRestaurant from "../screens/Layout/v2/FoodDetailRestaurant";
 import ListFood from "../screens/Layout/Restaurant/ListFood";
 import DetailFood from "../screens/Layout/Restaurant/DetailFood";
+import Map from "../screens/Layout/v2/Map";
 
 const Stack = createNativeStackNavigator();
 
@@ -59,7 +60,9 @@ const MainNavigator = () => {
             headerShown: false,
           }}
         />
-        <Stack.Screen name="FoodDetail" component={FoodDetail} />
+        <Stack.Screen name="FoodDetail" component={FoodDetail} options={{
+            headerShown: false,
+          }} />
         <Stack.Screen
           name="Root"
           component={TabNavigator}
@@ -140,6 +143,13 @@ const MainNavigator = () => {
         <Stack.Screen
           name="DetailFood"
           component={DetailFood}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="Map"
+          component={Map}
           options={{
             headerShown: false,
           }}

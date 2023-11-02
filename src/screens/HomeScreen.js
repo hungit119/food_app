@@ -158,7 +158,7 @@ export default function HomeScreen() {
         </View>
         <View>
           {/* <Recipes meals={meals} categories={categories} /> */}
-          <ProductScreen />
+          {/* <ProductScreen /> */}
           <TopFood />
         </View>
         {/* oder*/}

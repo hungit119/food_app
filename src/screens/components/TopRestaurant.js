@@ -51,6 +51,7 @@ const TopRestaurant = () => {
       >
         <View className="flex flex-row justify-between items-center mb-3">
           <Text className="font-bold text-lg">Nhà hàng nổi bật</Text>
+          <Text className="text-sm text-[#3BC5C9]">Xem thêm...</Text>
         </View>
         <View
           style={{

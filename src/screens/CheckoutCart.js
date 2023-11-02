@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -12,9 +12,25 @@ import {
 import Icon from "react-native-vector-icons/FontAwesome";
 import { ArrowLeftIcon } from "react-native-heroicons/solid";
 import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
+import { baseApiUrl } from "../constants";
 
-function CheckoutCart() {
+function CheckoutCart({ route }) {
+  const { order_id } = route.params;
+  const [listFood, setListFood] = useState([]);
+  const [orderDetail, setorderDetail] = useState({});
+  const [totalAmount, setTotalAmount] = useState(0);
   const navigation = useNavigation();
+  const fetchOrderIdDetail = async () => {
+    const response = await axios.post(baseApiUrl + "/get-order-detail", {
+      order_id,
+    });
+    setListFood(response.data.data);
+    setTotalAmount(response.data.totalAmount);
+  };
+  useEffect(() => {
+    fetchOrderIdDetail();
+  }, []);
   return (
     <View>
       <View className="  bg-slate-50 h-[100px] justify-center items-center ">
@@ -23,7 +39,7 @@ function CheckoutCart() {
         <View className="absolute left-3  ">
           <TouchableOpacity
             onPress={() => navigation.goBack()}
-            className=" bg-white p-2 rounded-full ml-4   "
+            className=" bg-white p-2 rounded-full ml-4"
           >
             <ArrowLeftIcon size="30" color="#3ac5c9" />
           </TouchableOpacity>
@@ -61,34 +77,27 @@ function CheckoutCart() {
 
           <View className="bg-slate-50 pt-3 " style={{ paddingHorizontal: 15 }}>
             <Text className="font-thin">Đơn hàng của bạn</Text>
-            <View className="flex-row justify-between mt-4">
-              <TouchableHighlight onPress={() => navigation.goBack()}>
-                <View className="flex-row">
-                  <Text className="mr-1 font-thin ">1x</Text>
-                  <Text>Cơm thố bò</Text>
-                </View>
-              </TouchableHighlight>
-              <View className="flex-row">
-                <Text className="mr-1 mt-1">60.000đ</Text>
-                <TouchableHighlight>
-                  <Icon className=" " name="close" color="#555555" size={21} />
+            {listFood.map((food) => (
+              <View className="flex-row justify-between mt-4">
+                <TouchableHighlight onPress={() => navigation.goBack()}>
+                  <View className="flex-row">
+                    <Text className="mr-1 font-thin ">{food.quantity}</Text>
+                    <Text>{food.name}</Text>
+                  </View>
                 </TouchableHighlight>
-              </View>
-            </View>
-            <View className="flex-row justify-between mt-4">
-              <TouchableHighlight onPress={() => navigation.goBack()}>
                 <View className="flex-row">
-                  <Text className="mr-1 font-thin ">1x</Text>
-                  <Text>Cơm thố bò</Text>
+                  <Text className="mr-1 mt-1">{food.prize}</Text>
+                  <TouchableHighlight>
+                    <Icon
+                      className=" "
+                      name="close"
+                      color="#555555"
+                      size={21}
+                    />
+                  </TouchableHighlight>
                 </View>
-              </TouchableHighlight>
-              <View className="flex-row">
-                <Text className="mr-1 mt-1">60.000đ</Text>
-                <TouchableHighlight>
-                  <Icon className=" " name="close" color="#555555" size={21} />
-                </TouchableHighlight>
               </View>
-            </View>
+            ))}
             <View className="mt-6">
               <TouchableHighlight onPress={() => navigation.goBack()}>
                 <Text className="font-semibold color-[#3ac5c9]">
@@ -118,7 +127,7 @@ function CheckoutCart() {
           <View className=" bg-slate-100 p-2" style={{ paddingHorizontal: 15 }}>
             <View className="flex-row justify-between">
               <Text className="p-2">Tạm tính</Text>
-              <Text>60.000đ</Text>
+              <Text>{totalAmount}</Text>
             </View>
             <View className="flex-row justify-between">
               <Text className="p-2">Phí áp dụng:0.2km</Text>
@@ -183,8 +192,8 @@ function CheckoutCart() {
           style={{ paddingHorizontal: 80 }}
         >
           <View>
-            <Text className="line-through font-thin">82.000đ</Text>
-            <Text className="font-bold">72.000đ</Text>
+            <Text className="line-through font-thin">{totalAmount}</Text>
+            <Text className="font-bold">{totalAmount}</Text>
           </View>
           <TouchableHighlight className="rounded-lg bg-[#3ac5c9]  ">
             <Text className="text-xl ml-10 mt-3 font-semibold  w-32 h-11 text-cyan-50 ">

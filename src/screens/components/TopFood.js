@@ -17,25 +17,27 @@ import { baseApiUrl } from "../../constants";
 
 const TopFood = () => {
   const [activeCategoryId, setActiveCategoryId] = useState(null);
-  const [restaurents, setRestaurents] = useState([]);
+  const [foods, setAllFoods] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { width } = Dimensions.get("window");
   const navigation = useNavigation();
 
-  const fetchRestaurents = async () => {
+  const fetchfoods = async () => {
     try {
-      const response = await axios.get(baseApiUrl + "/api/restaurent");
+      const response = await axios.get(baseApiUrl + "/api/food");
       if (response.data.success) {
         setIsLoading(false);
-        setRestaurents(response.data.data.data);
+        setAllFoods(response.data.data.data);
       }
     } catch (error) {
       throw error;
     }
   };
   useEffect(() => {
-    fetchRestaurents();
+    fetchfoods();
   }, []);
+
+  const showFood = foods.slice(0, 4);
   return (
     <SafeAreaView>
       <ScrollView
@@ -46,6 +48,7 @@ const TopFood = () => {
       >
         <View className="flex flex-row justify-between items-center mb-3">
           <Text className="font-bold text-lg">Món ăn nổi bật</Text>
+          <Text className="text-sm text-[#3BC5C9]">Xem thêm...</Text>
         </View>
         <View
           style={{
@@ -54,7 +57,7 @@ const TopFood = () => {
             justifyContent: "space-between",
           }}
         >
-          {restaurents.map((restaurent) => (
+          {showFood.map((restaurent) => (
             <View
               style={{
                 width: width / 2 - 10 * 2,
